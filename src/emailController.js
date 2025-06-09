@@ -1,14 +1,6 @@
-const express = require('express');
-const serverless = require('serverless-http');
-const cors = require('cors');
 const nodemailer = require('nodemailer');
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.post('/api/send-email', async (req, res) => {
+module.exports = async (req, res) => {
   const { to, subject, text } = req.body;
 
   if (!to || !subject || !text) {
@@ -16,20 +8,20 @@ app.post('/api/send-email', async (req, res) => {
   }
 
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: 'smtp.gmail.com',
     port: 587,
-    secure: false, // importante para Gmail
+    secure: false,
     auth: {
-      user: "emanuelmalungo25@gmail.com",
-      pass: "bfgkmaznebubsgrz" // de preferência use variável de ambiente
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
     }
   });
 
   const mailOptions = {
-    from: "emanuelmalungo25@gmail.com",
+    from: process.env.EMAIL_USER,
     to,
     subject,
-    text,
+    text
   };
 
   try {
@@ -39,7 +31,4 @@ app.post('/api/send-email', async (req, res) => {
     console.error('Erro ao enviar email:', error);
     res.status(500).send('Erro ao enviar email.');
   }
-});
-
-// Exporta a função serverless
-module.exports = serverless(app);
+};
