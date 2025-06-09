@@ -12,13 +12,13 @@ module.exports = async (req, res) => {
     port: 587,
     secure: false,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
+      user: process.env.EMAIL_USER | "emanuelmalungo25@gmail.com",
+      pass: process.env.EMAIL_PASS | "bfgkmaznebubsgrz"
     }
   });
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: process.env.EMAIL_USER | "emanuelmalungo25@gmail.com",
     to,
     subject,
     text
